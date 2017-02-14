@@ -1,0 +1,20 @@
+Package: aldo
+Type: Package
+Title: Approximate Likelihood Data Ordering
+Version: 0.1.0
+Author: Joe Guinness
+Maintainer: Joe Guinness <jsguinne@ncsu.edu>
+Description: This package contains methods for fast computations
+    for Gaussian process models. It is based on
+    Aldo Vecchia's (1988) ordered composite likelihood method,
+    but also has fast algorithms for reordering the observations,
+    finding nearest neighbors, and grouping the likelihood
+    calculations for faster and more accurate results.
+License: GNU GPLv3
+LazyData: TRUE
+Imports:
+    Rcpp (>= 0.12.4),
+    fields,
+    matrixStats
+LinkingTo: Rcpp
+RoxygenNote: 5.0.1
