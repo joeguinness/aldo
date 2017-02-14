@@ -46,22 +46,18 @@ NNlist[1:4]  # list elements are subsets of rows of NNarray
 
 
 # compute exact loglik, ungrouped, and grouped ordered composite logliks
-# system.time(  ll0 <- mvnMargLik(covparms,covfun,y,locs) # only do this if n is small 
+# system.time(  ll0 <- mvnMargLik(covparms,covfun,y,locs) # only do this if n is small
 system.time(  ll1 <- orderedCompLik(covparms,covfun,yord,locsord,NNarray)      )
 system.time(  ll2 <- orderedGroupCompLik(covparms,covfun,yord,locsord,NNlist)  )
 
 
 
-# an attempt to write a wrapper function to do all of this stuff:
-# ordering, finding neighbors, maximizing parameters
-# only covariance function implemented is isotropic matern 
-# interesting thing: block independent likelihood is ridiculously
-# good at finding parameter estimates that nearly maximize
-# vecchia's likelihood approximation
+# write a wrapper function to do all of this stuff:
+# ordering, finding neighbors, maximizing parameters.
+# Only covariance function implemented is isotropic matern
 # This function uses block independent likelihood to quickly get starting values
 # for an optimization of Vecchia's approximation
-system.time( result <- fitmodel(y,X,locs,maternIsotropic,numneighbors=30,fixedparameters=c(1,NA,NA,1))  )
-
+result <- fitmodel(y,X,locs,maternIsotropic,numneighbors=30,fixedparameters=c(1,NA,NA,1))
 result
 
 
