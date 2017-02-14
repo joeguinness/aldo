@@ -13,8 +13,7 @@ Description: This package contains methods for fast computations
 License: GNU GPLv3
 LazyData: TRUE
 Imports:
-    Rcpp (>= 0.12.4),
     fields,
     matrixStats
-LinkingTo: Rcpp
+LinkingTo: 
 RoxygenNote: 5.0.1
