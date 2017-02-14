@@ -304,11 +304,13 @@ fitmodel <- function(y, X, locs, covfun, numneighbors = 30, orderfun = "maxmindi
     
     # order the points according to orderfun argument
     # only maxmindist implemented. Others are easy too
+    cat("Finding Max/Min Ordering...")
     if( orderfun == "maxmindist" ){
         ord <- orderMaxMinLocal(locs)
     } else {
         stop("Unrecognized ordering method specified in orderfun argument")
     }
+    cat("Done \n")
     
 
     # define link functions for each parameter, i.e. take logs of
@@ -363,12 +365,12 @@ fitmodel <- function(y, X, locs, covfun, numneighbors = 30, orderfun = "maxmindi
     
     # use nelder mead (which seems more stable) to move towards maximum
     # of independent blocks likelihood approximation
-    result0 <- optim(startvals[notfixedinds],f0,method="Nelder-Mead",control=list(maxit=50,trace=1))
+    result0 <- optim(startvals[notfixedinds],f0,method="Nelder-Mead",control=list(maxit=50,trace=0))
     # use BFGS to get to the optimum once we are close
-    result0 <- optim(result0$par,f0,method="BFGS",control=list(maxit=100,trace=1))
+    result0 <- optim(result0$par,f0,method="BFGS",control=list(maxit=100,trace=0))
     # use the maximum independent blocks likelihood estimates to start 
     # an optimization of Vecchia's likelihood
-    result1 <- optim(result0$par,f1,method="BFGS",control=list(maxit=20,trace=5))
+    result1 <- optim(result0$par,f1,method="BFGS",control=list(maxit=20,trace=0))
     outparms <- fixedparameters
     # transform back to original parameter domain with inverse link
     for(j in 1:length(notfixedinds)){
