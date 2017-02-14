@@ -1,4 +1,7 @@
 
+
+devtools::install_github("joeguinness/aldo")
+
 # a short vignette demonstrating how to use the functions
 library(aldo)
 
@@ -59,39 +62,7 @@ system.time(  ll2 <- orderedGroupCompLik(covparms,covfun,yord,locsord,NNlist)  )
 # for an optimization of Vecchia's approximation
 system.time( result <- fitmodel(y,X,locs,maternIsotropic,numneighbors=30,fixedparameters=c(1,NA,NA,1))  )
 
-
-# see how long it takes to get estimates with exact likelihood    
-fixedparameters <- c(NA,NA,NA,1)
-notfixedinds <- which(is.na(fixedparameters))  # indices of parms to estimate
-linkfun <- list( function(x) log(x), function(x) log(x), function(x) log(x), function(x) log(x)/log(1-x) )
-invlinkfun <- list(function(x) exp(x),function(x) exp(x),function(x) exp(x), function(x) exp(x)/(1+exp(x)))
-startvals <- rep(0,4)
-
-f2 <- function(x){
-    for(j in 1:length(notfixedinds)){
-        covparms[notfixedinds[j]] <- invlinkfun[[notfixedinds[j]]](x[j])
-    }
-    ll <- mvnMargLik(covparms,covfun,y,locs)
-    return(-ll)
-}
-system.time({
-    result2 <- optim(startvals[notfixedinds],f2,method="Nelder-Mead",control=list(maxit=500,trace=1))
-})
-outparms <- fixedparameters
-# transform back to original parameter domain with inverse link
-for(j in 1:length(notfixedinds)){
-    outparms[notfixedinds[j]] <- invlinkfun[[notfixedinds[j]]](result2$par[j])
-}
-result2$par <- outparms
-
-
-# compare the estimates
-# approximate methods
-result$par
-# exact likelihood
-result2$par
-
-
+result
 
 
 
