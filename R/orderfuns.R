@@ -9,6 +9,8 @@
 #' @importFrom matrixStats rowMins
 orderMaxMinFast <- function( locs, numpropose ){
     
+    if(nrow(locs)==1) return(1)
+    
     n <- nrow(locs)
     d <- ncol(locs)
     remaininginds <- 1:n
@@ -22,7 +24,7 @@ orderMaxMinFast <- function( locs, numpropose ){
     for( j in 2:(n-1) ){
         randinds <- sample(remaininginds,min(numpropose,length(remaininginds)))
         distarray <-  rdist(locs[orderinds[1:j-1],,drop=FALSE],locs[randinds,,drop=FALSE])
-        bestind <- which(colMins(distarray) ==  max( colMins( distarray ) )) 
+        bestind <- which(matrixStats::colMins(distarray) ==  max( matrixStats::colMins( distarray ) )) 
         orderinds[j] <- randinds[bestind[1]]    
         remaininginds <- remaininginds[remaininginds!=orderinds[j]]
     }    
@@ -98,7 +100,8 @@ orderMaxMinLocal <- function(locs){
         gridorder <- orderMaxMinLocal(gridlocs)
     } else {    
         # use the quadratic algorithm to order grid boxes
-        gridorder <- orderMaxMinFast(gridlocs,20) }
+        gridorder <- orderMaxMinFast(gridlocs,20) 
+    }
     
     
     k <- 1
@@ -132,7 +135,7 @@ orderMaxMinLocal <- function(locs){
                 # distance to the already selected points (in 'used')
                 distmat <- rdist(locs[rem,,drop=FALSE],locs[used,,drop=FALSE])
                 #mindist <- apply(distmat,1,min)  # too slow
-                mindist <- rowMins(distmat)
+                mindist <- matrixStats::rowMins(distmat)
                 whichind <- which( mindist == max(mindist) )[1]
                 nextind <- rem[whichind]
          
